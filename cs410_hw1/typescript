@@ -1,0 +1,413 @@
+Script started on 2023-03-02 22:55:20-05:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="197" LINES="20"]
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                     ]2;cris@cris-IdeaPad-Flex-5-15IIL05:~/Desktop/cs410_hw1]1;..top/cs410_hw1[0m[27m[24m[J[01;32m➜  [36mcs410_hw1[00m [K[?1h=[?2004hscriptexit  script      scriptexit  ./hw1g++ -o hw1 hw1.cpp[18Dcat hw1.cpp       [11Dls -l      [?1l>[?2004l
+]2;ls --color=tty -l]1;lstotal 28
+-rwxrwxr-x 1 cris cris 18072 Mar  2 22:49 [0m[01;32mhw1[0m
+-rw-rw-r-- 1 cris cris  7071 Mar  2 22:49 hw1.cpp
+-rw-rw-r-- 1 cris cris     0 Mar  2 22:55 typescript
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                     ]2;cris@cris-IdeaPad-Flex-5-15IIL05:~/Desktop/cs410_hw1]1;..top/cs410_hw1[0m[27m[24m[J[01;32m➜  [36mcs410_hw1[00m [K[?1h=[?2004hls -lscriptexit  ./hw1g++ -o hw1 hw1.cpp[18Dcat hw1.cpp       [11Dls -l      cat hw1.cpp[?1l>[?2004l
+]2;cat hw1.cpp]1;cat#include <iostream>
+using namespace std;
+
+void printWelcomeMessage();
+void printSelectionMenu();
+void printSelectionIndicator();
+void printLegPrompt();
+void printAnxietyPrompt();
+void printDayOfWeekPrompt();
+void printHoursSleptPrompt();
+void printBodyWeightPrompt();
+void printBodyHeightPrompt();
+void printRoomTempPrompt();
+void printWrongSelectionError();
+void printLazyError();
+void pressEnterToContinue();
+void printNumberOfStepsMessage(int steps);
+void printNumberOfPillsMessage(int pills);
+void printNapTimeMessage(double napTime);
+void printAllowedCaloriesMessage(double calories);
+char getCharInRange(int min, int max);
+int getPositiveInt();
+int getPositiveInt(int min, int max);
+int calcNumOfSteps(int legs);
+int calcNumOfPills(int anxLevel, int dayOfWeek);
+double calcNumNapTime(int hrsSleep, int distWalked, int pillCount);
+double calcCalories(int wt, int ht, double temp, int distWalked);
+
+int main()
+{
+    int legs = 0;
+    int anxietyLevel = 0;
+    int dayOfTheWeek = 0;
+    int hoursSlept = 0;
+    int wt = 0;
+    int ht = 0;
+    double temp = 0;
+    bool walkFlag = false;
+    bool medFlag = false;
+
+    //   printWelcomeMessage();
+    //   printSelectionMenu();
+
+    while (true)
+    {
+        system("clear");
+        printWelcomeMessage();
+        printSelectionMenu();
+
+        printSelectionIndicator();
+        char ch = getchar();
+        switch (ch)
+        {
+        case '1':
+            printLegPrompt();
+            legs = getPositiveInt();
+            printNumberOfStepsMessage(calcNumOfSteps(legs));
+            pressEnterToContinue();
+            walkFlag = true;
+            break;
+        case '2':
+            printAnxietyPrompt();
+            anxietyLevel = getPositiveInt(1, 10);
+            printDayOfWeekPrompt();
+            dayOfTheWeek = getPositiveInt(1, 7);
+            printNumberOfPillsMessage(calcNumOfPills(anxietyLevel, dayOfTheWeek));
+            pressEnterToContinue();
+            medFlag = true;
+            break;
+        case '3':
+            if ((walkFlag == true) && (medFlag == true))
+            {
+                printHoursSleptPrompt();
+                hoursSlept = getPositiveInt();
+                printNapTimeMessage(calcNumNapTime(hoursSlept, calcNumOfSteps(legs), calcNumOfPills(anxietyLevel, dayOfTheWeek)));
+                pressEnterToContinue();
+            }
+            else
+            {
+                printLazyError();
+                pressEnterToContinue();
+            }
+            break;
+        case '4':
+            if (walkFlag == true)
+            {
+                printBodyWeightPrompt();
+                wt = getPositiveInt();
+                printBodyHeightPrompt();
+                ht = getPositiveInt();
+                printRoomTempPrompt();
+                temp = getPositiveInt();
+                printAllowedCaloriesMessage(calcCalories(wt, ht, temp, calcNumOfSteps(legs)));
+                pressEnterToContinue();
+            }
+            else
+            {
+                printLazyError();
+                pressEnterToContinue();
+            }
+            break;
+        case '5':
+            return 0;
+            break;
+        default:
+            printWrongSelectionError();
+            pressEnterToContinue();
+            break;
+        }
+    }
+    return 0;
+}
+
+void printWelcomeMessage()
+{
+    cout << "Welcome to Health-o-Matic please make a selection "
+         << "from the listed options.\n\n";
+}
+
+void printSelectionMenu()
+{
+    cout << "Health-o-Matic Options\n"
+         << "----------------------\n"
+         << "1. Taking a Walk!\n"
+         << "2. Your Medications\n"
+         << "3. Nap Time!\n"
+         << "4. Caloric Intake\n"
+         << "5. Quit\n";
+}
+
+void printSelectionIndicator()
+{
+    cout << "\nSelection: ";
+}
+
+void printLegPrompt()
+{
+    cout << "Please enter the number of legs of the walk that you wish to have: ";
+}
+
+void printAnxietyPrompt()
+{
+    cout << "Please enter your anxiety level from 1 to 10: ";
+}
+
+void printDayOfWeekPrompt()
+{
+    cout << "Please enter the current day of the week: ";
+}
+
+void printHoursSleptPrompt()
+{
+    cout << "Please enter the number of hours slept yesterday: ";
+}
+
+void printWrongSelectionError()
+{
+    cout << "\nPlease enter the right selection!\n";
+}
+
+void printBodyWeightPrompt()
+{
+    cout << "Please enter your body weight in pounds: ";
+}
+
+void printBodyHeightPrompt()
+{
+    cout << "Please enter your body height in inches: ";
+}
+
+void printRoomTempPrompt()
+{
+    cout << "Please enter the room temperature Fahrenheit : ";
+}
+
+void printLazyError()
+{
+    cout << "\nUnable to select this option!\n";
+}
+
+void pressEnterToContinue()
+{
+    cout << "\nPress Enter to continue ";
+    getchar();
+    getchar();
+}
+
+void printNumberOfStepsMessage(int steps)
+{
+    cout << "The total number of steps from the legs provided is: " << steps << endl;
+}
+
+void printNumberOfPillsMessage(int pills)
+{
+    cout << "Based on your anxiety level and the day of the week you can take " << pills << " pills." << endl;
+}
+
+void printNapTimeMessage(double napTime)
+{
+    cout << "Based on the number of hours slept, number of steps taken and the medicine taken you can nap for " << napTime << " minutes." << endl;
+}
+
+void printAllowedCaloriesMessage(double calories)
+{
+    cout << "Based on the distance walked, body weight, body height and room temperature you are allowed " << calories << " calories.\n";
+}
+
+char getCharInRange(int min, int max)
+{
+    char select = getchar();
+    while ((select < min) && (select > max))
+    {
+        select = getchar();
+    }
+    return select;
+}
+
+int getPositiveInt()
+{
+    int positiveNumber;
+    cin >> positiveNumber;
+    cin.ignore(200, '\n');
+    while (positiveNumber <= 0) // If the value is less than equal than zero it will ask for a different value
+    {
+        cout << "Positive numbers only please. Try again: ";
+        cin >> positiveNumber;
+        cin.ignore(200, '\n');
+    }
+    return positiveNumber; // Returning the correct number
+}
+
+int getPositiveInt(int min, int max)
+{
+    int positiveNumber;
+    cin >> positiveNumber;
+    cin.ignore(200, '\n');
+    while ((positiveNumber < min) || (positiveNumber > max)) // If the value is less than equal than zero it will ask for a different value
+    {
+        cout << "Only number between " << min << " and " << max << ". Try again: ";
+        cin >> positiveNumber;
+        cin.ignore(200, '\n');
+    }
+    return positiveNumber; // Returning the correct number
+}
+
+int calcNumOfSteps(int legs)
+{
+    int steps = legs;
+    for (int i = (legs - 1); i > 0; i--)
+    {
+        steps *= i;
+    }
+    return steps;
+}
+
+int calcNumOfPills(int anxLevel, int dayOfWeek)
+{
+    int pillCount = 0;
+
+    if ((anxLevel - dayOfWeek) > 0)
+    {
+        pillCount = anxLevel - dayOfWeek;
+    }
+    else
+    {
+        pillCount = 0;
+    }
+    return pillCount;
+}
+
+double calcNumNapTime(int hrsSleep, int distWalked, int pillCount)
+{
+    return ((hrsSleep + distWalked) / (pillCount > 0 ? pillCount : 1));
+}
+
+double calcCalories(int wt, int ht, double temp, int distWalked)
+{
+    return ((6 * wt) + (2 * ht) + (1 / temp) + distWalked);
+}[1m[7m%[27m[1m[0m                                                                                                                                                                                                     ]2;cris@cris-IdeaPad-Flex-5-15IIL05:~/Desktop/cs410_hw1]1;..top/cs410_hw1[0m[27m[24m[J[01;32m➜  [36mcs410_hw1[00m [K[?1h=[?2004hcat hw1.cpp[11Dls -l      scriptexit  ./hw1g++ -o hw1 hw1.cpp[?1l>[?2004l
+]2;g++ -o hw1 hw1.cpp]1;g++[1m[7m%[27m[1m[0m                                                                                                                                                                                                     ]2;cris@cris-IdeaPad-Flex-5-15IIL05:~/Desktop/cs410_hw1]1;..top/cs410_hw1[0m[27m[24m[J[01;32m➜  [36mcs410_hw1[00m [K[?1h=[?2004hg++ -o hw1 hw1.cpp[18Dcat hw1.cpp       [11Dls -l      scriptexit  ./hw1g++ -o hw1 hw1.cpp[18D./hw1             [13D[?1l>[?2004l
+]2;./hw1]1;./hw1[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 3
+
+Unable to select this option!
+
+Press Enter to continue 
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 4
+
+Unable to select this option!
+
+Press Enter to continue 
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 1
+Please enter the number of legs of the walk that you wish to have: 6
+The total number of steps from the legs provided is: 720
+
+Press Enter to continue 
+
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 3
+
+Unable to select this option!
+
+Press Enter to continue 
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 2
+Please enter your anxiety level from 1 to 10: 3
+Please enter the current day of the week: 5
+Based on your anxiety level and the day of the week you can take 0 pills.
+
+Press Enter to continue 
+
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 3
+Please enter the number of hours slept yesterday: 5
+Based on the number of hours slept, number of steps taken and the medicine taken you can nap for 725 minutes.
+
+Press Enter to continue 
+
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 4
+Please enter your body weight in pounds: 250
+Please enter your body height in inches: 72
+Please enter the room temperature Fahrenheit : 79.7
+Based on the distance walked, body weight, body height and room temperature you are allowed 2364.01 calories.
+
+Press Enter to continue 
+
+[H[2J[3JWelcome to Health-o-Matic please make a selection from the listed options.
+
+Health-o-Matic Options
+----------------------
+1. Taking a Walk!
+2. Your Medications
+3. Nap Time!
+4. Caloric Intake
+5. Quit
+
+Selection: 5
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                     ]2;cris@cris-IdeaPad-Flex-5-15IIL05:~/Desktop/cs410_hw1]1;..top/cs410_hw1[0m[27m[24m[J[01;32m➜  [36mcs410_hw1[00m [K[?1h=[?2004heexit[?1l>[?2004l
+]2;exit]1;exit
+Script done on 2023-03-02 22:58:54-05:00 [COMMAND_EXIT_CODE="0"]
