@@ -1,15 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "hw2_functions.h"
-// #include <cstdlib>
-// #include <ctime>
 using namespace std;
-
-// struct creature {
-//     string name = "";
-//     int length = 0;
-//     int heigth = 0;
-// };
 
 int main()
 {
@@ -22,50 +14,51 @@ int main()
     creature cards[CARD_SIZE];
     creature krustyCards[KRUSTY_MAX_CARD];
 
+    // srand(37);
     srand(time(NULL));
 
     cards[0].name = "Wanda Walrus";
     cards[0].length = 2;
-    cards[0].heigth = 6;
+    cards[0].height = 6;
     cards[1].name = "Stanley Sardine";
     cards[1].length = 3;
-    cards[1].heigth = 1;
+    cards[1].height = 1;
     cards[2].name = "Sylvia Seahorse";
     cards[2].length = 4;
-    cards[2].heigth = 2;
+    cards[2].height = 2;
     cards[3].name = "Janie Jellyfish";
     cards[3].length = 1;
-    cards[3].heigth = 10;
+    cards[3].height = 10;
     cards[4].name = "Doris Dolphin";
     cards[4].length = 8;
-    cards[4].heigth = 4;
+    cards[4].height = 4;
     cards[5].name = "Bob Blobfish";
     cards[5].length = 1;
-    cards[5].heigth = 5;
+    cards[5].height = 5;
     cards[6].name = "Sammy Shark";
     cards[6].length = 8;
-    cards[6].heigth = 4;
+    cards[6].height = 4;
     cards[7].name = "Walter Whale";
     cards[7].length = 6;
-    cards[7].heigth = 2;
+    cards[7].height = 2;
     cards[8].name = "Stevie Salmon";
     cards[8].length = 2;
-    cards[8].heigth = 3;
+    cards[8].height = 3;
     cards[9].name = "Sheila Shellfish";
     cards[9].length = 1;
-    cards[9].heigth = 3;
+    cards[9].height = 3;
     cards[10].name = "Daniel Octopus";
     cards[10].length = 3;
-    cards[10].heigth = 7;
+    cards[10].height = 7;
     cards[11].name = "Mark Herring";
     cards[11].length = 9;
-    cards[11].heigth = 5;
+    cards[11].height = 5;
     cards[12].name = "Bernie Tuna";
     cards[12].length = 3;
-    cards[12].heigth = 5;
+    cards[12].height = 5;
     cards[13].name = "Oscar Tilapia";
     cards[13].length = 5;
-    cards[13].heigth = 3;
+    cards[13].height = 3;
 
     sayings[0] = "Whazzup?";
     sayings[1] = "Duuude, totally love the clown head and human body combo!";
@@ -82,21 +75,32 @@ int main()
     sayings[12] = "Just keep swimming, swimmin, swimming, ...";
     sayings[13] = "You just keep sinking, sinking, sinking,...";
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 150; i++)
     {
-        std::cout << "Picking up a card from a stranger.\n";
-        int randomNum = getRandomNumber(14);
-        std::cout << "Stranger says: \"" << sayings[getRandomNumber(14)] << "\"\n";
-        krustyCards[i] = cards[randomNum];
-        cards[randomNum].flag = true;
-        std::cout << "Stranger gave you the " << krustyCards[i].name << "'s card.\n\n";
+        if (isCollectionComplete(cards, CARD_SIZE))
+        {
+            std::cout << "After collecting " << getNumberOfCards(krustyCards, KRUSTY_MAX_CARD) << " cards you completed the whole set.\n";
+            findOccurance(cards, CARD_SIZE, krustyCards, getNumberOfCards(krustyCards, KRUSTY_MAX_CARD));
+            printCardList(cards, CARD_SIZE, true);
+            break;
+        }
+        else if (isStackOfSix(krustyCards, getNumberOfCards(krustyCards, KRUSTY_MAX_CARD)))
+        {
+            std::cout << "You were able to stack 6 cards\n";
+            printStackOfSix(krustyCards, getNumberOfCards(krustyCards, KRUSTY_MAX_CARD));
+            break;
+        }
+        else
+        {
+            int randomNum = getRandomNumber(14);
+            krustyCards[i] = cards[randomNum];
+            cards[randomNum].flag = true;
+            std::sort(krustyCards, krustyCards + getNumberOfCards(krustyCards, KRUSTY_MAX_CARD), isCardSmaller);
+        }
     }
+    // printCardList(krustyCards, KRUSTY_MAX_CARD);
+    // std::cout << isCollectionComplete(cards, CARD_SIZE) << endl;
     getchar();
 
-    printCardList(krustyCards, KRUSTY_MAX_CARD);
-    std::cout << getNumberOfCards(krustyCards, KRUSTY_MAX_CARD) << endl;
-    std::sort(krustyCards, krustyCards + getNumberOfCards(krustyCards, KRUSTY_MAX_CARD), isCardSmaller);
-    printCardList(krustyCards, KRUSTY_MAX_CARD);
-    std::cout << isCollectionComplete(krustyCards, getNumberOfCards(krustyCards, KRUSTY_MAX_CARD)) << endl;
     return 0;
 }
